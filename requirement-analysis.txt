@@ -1,0 +1,41 @@
+Entities :
+
+1. User 
+2. Tour
+3. Locations
+4. Review
+5. Booking
+
+
+collections :
+User
+{
+    name: "mahabub",
+    email; "mahabub@gmail.com",
+    review: [
+        {review: "good",
+        rating: 4.5,}
+    ],
+
+    booking: [
+        {
+            tourName: "Netrokona to Mymenshisgh"
+        }
+    ]
+}
+Tour 
+
+{
+    locaitons: [
+        {
+            area: "Sent Marten
+        }
+    ]
+}
+
+
+Embedding  vs Referencing
+
+
+
+Referencing :
