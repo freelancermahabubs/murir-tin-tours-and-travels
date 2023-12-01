@@ -1,4 +1,5 @@
-import { Request, Response } from 'express'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextFunction, Request, Response } from 'express'
 import { TourServices } from '../services/tour.service'
 
 const createTour = async (req: Request, res: Response) => {
@@ -18,7 +19,7 @@ const createTour = async (req: Request, res: Response) => {
     })
   }
 }
-const getAllTours = async (req: Request, res: Response) => {
+const getAllTours = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await TourServices.getAllTourFromDB()
     res.status(200).json({
@@ -26,16 +27,16 @@ const getAllTours = async (req: Request, res: Response) => {
       message: 'Tour Fetched successfully',
       data: result,
     })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
+  } catch (error) {
+    next(error)
   }
 }
 
-const getSingleTour = async (req: Request, res: Response) => {
+const getSingleTour = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const id = req.params.id
     const result = await TourServices.getSingleTourFromDB(id)
@@ -44,16 +45,16 @@ const getSingleTour = async (req: Request, res: Response) => {
       message: 'Single Tour Fetched successfully',
       data: result,
     })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
+  } catch (error) {
+    next(error)
   }
 }
 
-const getNextSchedule= async (req: Request, res: Response) => {
+const getNextSchedule = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const id = req.params.id
     const result = await TourServices.getNextScheduleIntoDB(id)
@@ -62,15 +63,11 @@ const getNextSchedule= async (req: Request, res: Response) => {
       message: ' Next Schedule Fetched successfully',
       data: result,
     })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
+  } catch (error) {
+    next(error)
   }
 }
-const updateTour = async (req: Request, res: Response) => {
+const updateTour = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userData = req.body
     const id = req.params.id
@@ -80,16 +77,12 @@ const updateTour = async (req: Request, res: Response) => {
       message: 'Tour Updated successfully',
       data: result,
     })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
+  } catch (error) {
+    next(error)
   }
 }
 
-const deleteTour = async (req: Request, res: Response) => {
+const deleteTour = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id
     await TourServices.deleteTourIntoDb(id)
@@ -97,12 +90,8 @@ const deleteTour = async (req: Request, res: Response) => {
       status: 'success',
       message: 'Tour Deleted successfully',
     })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
+  } catch (error) {
+    next(error)
   }
 }
 
@@ -112,5 +101,5 @@ export const TourController = {
   getSingleTour,
   updateTour,
   deleteTour,
-  getNextSchedule
+  getNextSchedule,
 }

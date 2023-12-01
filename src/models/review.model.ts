@@ -1,4 +1,5 @@
-import mongoose, { Schema, model } from 'mongoose'
+
+import { Schema, model } from 'mongoose'
 import { IReview } from '../interfaces/review.interface'
 import Tour from './tour.model'
 
@@ -32,32 +33,35 @@ const reviewSchema = new Schema<IReview>(
 
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true })
 
-reviewSchema.statics.calcAverageRatings() = async function (
-  tourId: mongoose.Types.ObjectId,
+reviewSchema.statics.calcAverageRatings = async function (
+  tourId: Schema.Types.ObjectId,
 ) {
+  //tourId newObjectId("2vj3ffvgcd")
+  //this refers the Review  Model
   const stats = await this.aggregate([
-    { $match: tourId },
+    {
+      $match: { tour: tourId },
+    },
     {
       $group: {
         _id: '$tour',
-        numberofRatings: { $sum: 1 },
+        numberOfRatings: { $sum: 1 },
         avgRating: { $avg: '$rating' },
       },
     },
   ])
 
-  if(stats.lenght > 0){
+  if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
-      ratingAverage: stats[0].numberofRatings,
-      ratingQuantity: stats[0].avgRating
+      ratingAverage: stats[0].numberOfRatings,
+      ratingQuantity: stats[0].avgRating,
     })
-  }else{
+  } else {
     await Tour.findByIdAndUpdate(tourId, {
       ratingAverage: 0,
-      ratingQuantity: 0
+      ratingQuantity: 0,
     })
   }
 }
-
 const Review = model<IReview>('Review', reviewSchema)
 export default Review

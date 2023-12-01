@@ -28,23 +28,22 @@ const userSchema = new Schema<IUser>({
   },
   userStatus: {
     type: String,
-    enum : ["active", 'inactive'],
+    enum: ['active', 'inactive'],
     default: 'active',
-    message: "User status is either: active or inactive. your stauts are {VALUE}"
-  }
+    message:
+      'User status is either: active or inactive. your stauts are {VALUE}',
+  },
 })
 
-
-// pre hook for query middleware 
-userSchema.pre(/^find/, function(this: Query<IUser, Document>, next){
-this.find({userStatus: {$eq: "active"}})
-next()
+// pre hook for query middleware
+userSchema.pre(/^find/, function (this: Query<IUser, Document>, next) {
+  this.find({ userStatus: { $eq: 'active' } })
+  next()
 })
 // userSchema.pre('find', function(next){
 // this.findOne({userStatus: {$eq: "active"}})
 // next()
 // })
 
-
-const User = model<IUser>("User", userSchema)
+const User = model<IUser>('User', userSchema)
 export default User
