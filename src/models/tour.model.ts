@@ -23,6 +23,10 @@ const tourSchema = new Schema<ITour, TTourModel, ITourMethods>(
       type: Number,
       required: [true, 'Please tell us your Price'],
     },
+    availableSeats: {
+      type: Number,
+      required: [true, ' Please Tell us Your AvailableSeats'],
+    },
     imageCover: {
       type: String,
       required: [true, 'Please tell us your ImageCover'],
@@ -48,9 +52,9 @@ tourSchema.virtual('duratinDays').get(function () {
 })
 
 tourSchema.virtual('reviews', {
-  ref: "Review",
-  foreignField: "tour",
-  localField: "_id"
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 })
 
 // data create  pre hook

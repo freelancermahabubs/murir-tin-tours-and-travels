@@ -1,99 +1,70 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { TourServices } from '../services/tour.service'
+import sendSuccessResponse from '../utils/sendSuccessResponse'
+import catchAsyncFunction from '../utils/catchAsyncFunction'
 
-const createTour = async (req: Request, res: Response) => {
-  try {
-    const userData = req.body
-    const result = await TourServices.createTourIntoDB(userData)
-    res.status(201).json({
-      status: 'success',
-      message: 'Tour created successfully',
-      data: result,
-    })
-  } catch (error: any) {
-    console.error(error)
-    res.status(500).json({
-      status: 'failed',
-      message: error.message || 'Something went wrong',
-    })
-  }
-}
-const getAllTours = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await TourServices.getAllTourFromDB()
-    res.status(200).json({
-      status: 'success',
-      message: 'Tour Fetched successfully',
-      data: result,
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+const createTour = catchAsyncFunction(async (req: Request, res: Response) => {
+  const tourData = req.body
+  const result = await TourServices.createTourIntoDB(tourData)
+  sendSuccessResponse(res, {
+    statusCode: 201,
+    message: 'Tour Created Successfully',
+    data: result,
+  })
+})
+const getAllTours = catchAsyncFunction(async (req: Request, res: Response) => {
+  const result = await TourServices.getAllTourFromDB()
+  sendSuccessResponse(res, {
+    statusCode: 200,
+    message: 'Sucessfully retrieved all Tours',
+    data: result,
+  })
+})
 
-const getSingleTour = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+const getSingleTour = catchAsyncFunction(
+  async (req: Request, res: Response) => {
     const id = req.params.id
     const result = await TourServices.getSingleTourFromDB(id)
-    res.status(200).json({
-      status: 'success',
-      message: 'Single Tour Fetched successfully',
+    sendSuccessResponse(res, {
+      statusCode: 200,
+      message: 'Successfully retrieved Single Tour',
       data: result,
     })
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getNextSchedule = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+  },
+)
+const getNextSchedule = catchAsyncFunction(
+  async (req: Request, res: Response) => {
     const id = req.params.id
     const result = await TourServices.getNextScheduleIntoDB(id)
-    res.status(200).json({
-      status: 'success',
-      message: ' Next Schedule Fetched successfully',
+    sendSuccessResponse(res, {
+      statusCode: 200,
+      message: 'Next Schedule retrieved successfully',
       data: result,
     })
-  } catch (error) {
-    next(error)
-  }
-}
-const updateTour = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userData = req.body
-    const id = req.params.id
-    const result = await TourServices.upDateTourIntoDB(id, userData)
-    res.status(200).json({
-      status: 'success',
-      message: 'Tour Updated successfully',
-      data: result,
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+  },
+)
+const updateTour = catchAsyncFunction(async (req: Request, res: Response) => {
+  const userData = req.body
+  const id = req.params.id
+  const result = await TourServices.upDateTourIntoDB(id, userData)
 
-const deleteTour = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id
-    await TourServices.deleteTourIntoDb(id)
-    res.status(200).json({
-      status: 'success',
-      message: 'Tour Deleted successfully',
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+  sendSuccessResponse(res, {
+    statusCode: 200,
+    message: 'Tour Updated Successfully',
+    data: result,
+  })
+})
+
+const deleteTour = catchAsyncFunction(async (req: Request, res: Response) => {
+  const id = req.params.id
+  await TourServices.deleteTourIntoDb(id)
+  sendSuccessResponse(res, {
+    statusCode: 200,
+    message: ' Tour Deleted Successfully',
+    data: null,
+  })
+})
 
 export const TourController = {
   createTour,
