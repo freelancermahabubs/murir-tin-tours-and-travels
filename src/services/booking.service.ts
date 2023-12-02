@@ -22,7 +22,7 @@ const createBookingIntoDB = async (
       {
         $inc: { availableSeats: -booking[0].bookedSlots },
       },
-      { session },
+      { session},
     )
     if (!tour) {
       throw new Error('Tour Create Failed')
