@@ -6,6 +6,7 @@ const tourSchema = new Schema<ITour, TTourModel, ITourMethods>(
     name: {
       type: String,
       required: [true, 'Please tel us your name'],
+      unique: true,
     },
     durationHours: {
       type: Number,

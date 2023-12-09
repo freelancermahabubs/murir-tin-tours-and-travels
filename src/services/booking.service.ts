@@ -4,6 +4,7 @@ import { IBooking } from '../interfaces/booking.interface'
 
 import Booking from '../models/booking.mode'
 import Tour from '../models/tour.model'
+import GenericError from '../classes/errorClasses/GenericError'
 
 const createBookingIntoDB = async (
   bookingData: IBooking,
@@ -15,7 +16,7 @@ const createBookingIntoDB = async (
   try {
     const booking = await Booking.create([bookingData], { session })
     if (!booking) {
-      throw new Error('Booking Create Failed')
+      throw new GenericError('Booking Create Failed', 400)
     }
     const tour = await Tour.findByIdAndUpdate(
       booking[0].tour,
@@ -25,7 +26,7 @@ const createBookingIntoDB = async (
       { session},
     )
     if (!tour) {
-      throw new Error('Tour Create Failed')
+      throw new GenericError('Tour Create Failed', 400)
     }
     await session.commitTransaction()
     await session.endSession()
