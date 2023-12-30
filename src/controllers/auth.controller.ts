@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { authServices } from '../services/auth.service'
-import catchAsyncFunction from '../utils/catchAsync'
-import sendSuccessResponse from '../utils/sendResponse'
+
+
 import config from '../config'
+import catchAsyncFunction from '../utils/catchAsyncFunction'
+import sendSuccessResponse from '../utils/sendSuccessResponse'
 
 const register = catchAsyncFunction(async (req: Request, res: Response) => {
   const result = await authServices.register(req.body)
