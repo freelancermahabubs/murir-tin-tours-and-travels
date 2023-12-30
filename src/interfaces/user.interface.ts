@@ -3,7 +3,7 @@ interface IUser {
   age: number
   email: string
   password: string
-  passwrodChangeAt: Date
+  passwordChangedAt: Date
   photo?: string
   role: 'user' | 'admin'
   userStatus: 'active' | 'inactive'
